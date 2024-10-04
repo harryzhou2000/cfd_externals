@@ -1,0 +1,7 @@
+[submodule "repos/hdf5"]
+	path = repos/hdf5
+	url = https://github.com/HDFGroup/hdf5
+	branch = hdf5_1_14_3
+[submodule "repos/cgns"]
+	path = repos/cgns
+	url = https://github.com/CGNS/CGNS.git
