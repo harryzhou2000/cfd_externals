@@ -5,3 +5,6 @@
 [submodule "repos/cgns"]
 	path = repos/cgns
 	url = https://github.com/CGNS/CGNS.git
+[submodule "repos/zlib"]
+	path = repos/zlib
+	url = https://github.com/madler/zlib
