@@ -1,4 +1,4 @@
-import os
+import os, sys
 import platform
 import argparse
 
@@ -9,8 +9,8 @@ args = parser.parse_args()
 if len(args.libs):
     libs = eval(args.libs)
 else:
-    libs = ["zlib", "hdf5", "cgns"]
-    
+    libs = ["zlib", "hdf5", "cgns", "parmetis_fix"]
+
 print(f"starting to build libs: {libs}")
 
 workingDir = os.getcwd()
@@ -34,6 +34,7 @@ repos = {
     "zlib": "repos/zlib",
     "hdf5": "repos/hdf5",
     "cgns": "repos/cgns",
+    "parmetis_fix": "repos/parmetis_fix"
 }
 
 settings = {}
@@ -54,6 +55,8 @@ settings["cgns"] = [
     # ("HDF5_NEED_ZLIB", "ON")
 ]
 
+settings["parmetis_fix"] = [("BUILD_SHARED_LIBS", "OFF")]
+
 
 os.makedirs(installDirFull, exist_ok=True)
 
@@ -68,10 +71,11 @@ for lib in libs:
         f"cmake {os.path.join(workingDir, repos[lib])} -DCMAKE_INSTALL_PREFIX={installDirFull} "
         + "".join([f" -D{setting[0]}={setting[1]} " for setting in settings[lib]])
     )
-    print("#" * min(os.get_terminal_size()[0], 200))
+    lw = min((os.get_terminal_size()[0] if sys.stdout.isatty() else 10), 200)
+    print("#" * lw)
     print(f"doing lib {lib} with command: ")
     print(cmakeConfigureCmd)
-    print("#" * min(os.get_terminal_size()[0], 200))
+    print("#" * lw)
     os.system(cmakeConfigureCmd)
     os.system(f"cmake --build . --config release --parallel {npBuild}")
     os.system(f"cmake --install .")
