@@ -34,7 +34,13 @@ add_subdirectory(repos/hdf5)
 # deal with hijacking of hdf5's cmake
 # set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE FILEPATH "install place" FORCE)
 
+# set(HDF5_LIBRARIES hdf5-shared)
+# set(HDF5_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/repos/hdf5/src)
 
+
+# https://github.com/CGNS/CGNS/discussions/363, modern way of add_subdirectory?
+# set(HDF5_DIR ${CMAKE_CURRENT_BINARY_DIR}/repos/hdf5/CMakeFiles)
+set(HDF5_DIR ${CMAKE_CURRENT_SOURCE_DIR}/repos/hdf5)
 
 set(CGNS_BUILD_SHARED OFF CACHE BOOL "CGNS_BUILD_SHARED")
 set(CGNS_ENABLE_HDF5 ON CACHE BOOL "CGNS_ENABLE_HDF5")
