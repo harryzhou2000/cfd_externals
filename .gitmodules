@@ -8,3 +8,6 @@
 [submodule "repos/zlib"]
 	path = repos/zlib
 	url = https://github.com/madler/zlib
+[submodule "repos/parmetis_fix"]
+	path = repos/parmetis_fix
+	url = git@github.com:harryzhou2000/parmetis_fix.git
