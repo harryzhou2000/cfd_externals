@@ -26,6 +26,16 @@ Libraries to build:
 
 ## building
 
+Clone this repo.
+
+Update git submodules.
+
+```bash
+git submodule update --init --depth=1 --recursive
+```
+
+Then run the script to build.
+
 ```bash
 python cfd_externals_build.py
 ```
