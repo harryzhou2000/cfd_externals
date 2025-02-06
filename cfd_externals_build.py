@@ -69,6 +69,7 @@ for lib in libs:
     os.chdir(curBuildDirFull)
     cmakeConfigureCmd = (
         f"cmake {os.path.join(workingDir, repos[lib])} -DCMAKE_INSTALL_PREFIX={installDirFull} "
+        + f"-DCMAKE_PREFIX_PATH={installDirFull} "
         + "".join([f" -D{setting[0]}={setting[1]} " for setting in settings[lib]])
     )
     lw = min((os.get_terminal_size()[0] if sys.stdout.isatty() else 10), 200)
