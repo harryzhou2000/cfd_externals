@@ -34,7 +34,7 @@ repos = {
     "zlib": "repos/zlib",
     "hdf5": "repos/hdf5",
     "cgns": "repos/cgns",
-    "parmetis_fix": "repos/parmetis_fix"
+    "parmetis_fix": "repos/parmetis_fix",
 }
 
 settings = {}
@@ -51,8 +51,8 @@ settings["cgns"] = [
     ("CGNS_ENABLE_HDF5", "ON"),
     ("CGNS_ENABLE_LFS", "ON"),
     ("CGNS_ENABLE_PARALLEL", "ON"),
-    # ("HDF5_NEED_MPI", "ON")
-    # ("HDF5_NEED_ZLIB", "ON")
+    ("HDF5_NEED_MPI", "ON"),
+    # ("HDF5_NEED_ZLIB", "ON"),
 ]
 
 settings["parmetis_fix"] = [("BUILD_SHARED_LIBS", "OFF")]
