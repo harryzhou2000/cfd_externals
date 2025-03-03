@@ -42,3 +42,7 @@ python cfd_externals_build.py
 
 Then all files are locally installed in `install`.
 
+## Making a bundle
+
+tar --exclude='*.git*' -zcvf cfd_externals_expo.tar.gz cfd_externals_expo
+

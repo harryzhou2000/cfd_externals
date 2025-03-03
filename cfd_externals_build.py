@@ -38,24 +38,31 @@ repos = {
 }
 
 settings = {}
-settings["zlib"] = []
+settings["zlib"] = [
+    ("CMAKE_BUILD_TYPE", "RELEASE"),
+]
 
 settings["hdf5"] = [
+    ("CMAKE_BUILD_TYPE", "RELEASE"),
     ("HDF5_ENABLE_PARALLEL", "ON"),
     ("HDF5_ENABLE_Z_LIB_SUPPORT", "ON"),
     ("BUILD_TESTING", "OFF"),
 ]
 
 settings["cgns"] = [
-    ("CGNS_BUILD_SHARED", "OFF"),
+    ("CMAKE_BUILD_TYPE", "RELEASE"),
+    ("CGNS_BUILD_SHARED", "ON"),
     ("CGNS_ENABLE_HDF5", "ON"),
     ("CGNS_ENABLE_LFS", "ON"),
     ("CGNS_ENABLE_PARALLEL", "ON"),
     ("HDF5_NEED_MPI", "ON"),
-    # ("HDF5_NEED_ZLIB", "ON"),
+    ("HDF5_NEED_ZLIB", "ON"),
 ]
 
-settings["parmetis_fix"] = [("BUILD_SHARED_LIBS", "OFF")]
+settings["parmetis_fix"] = [
+    ("CMAKE_BUILD_TYPE", "RELEASE"),
+    ("BUILD_SHARED_LIBS", "ON"),
+]
 
 
 os.makedirs(installDirFull, exist_ok=True)
