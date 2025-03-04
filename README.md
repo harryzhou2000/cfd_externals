@@ -80,10 +80,20 @@ or
 git config --global url."~/repo/github/".insteadOf "https://github.com/"
 ```
 
+edit `~/.gitconfig` to reverse this setting.
+
+Using global instead of local setting saves the trouble of recursively configuring submodule settings.
+
 ### Populate submodules
 
 To update / init recursively:
 
 ```bash
 git -c protocol.file.allow=always submodule update --init --recursive
+```
+
+update with remote:
+
+```bash
+git -c protocol.file.allow=always submodule update --init --remote --recursive
 ```
