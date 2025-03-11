@@ -42,6 +42,18 @@ python cfd_externals_build.py
 
 Then all files are locally installed in `install`.
 
+**A pitfall**: if you need to specify a non-system compiler set, like /path/to/gcc-11, error in linking `libmpi.so` could occur.
+
+Therefore, if you see something like conflicting `libmpi.so` in the final executable linking, or by `ldd` you see wrong mpi links, or the program crashes due to mpi, try this:
+
+```bash
+CC=mpicc CXX=mpicxx python cfd_externals_build.py
+```
+
+which will link mpi correctly if the problem is linking to a faulty mpi library.
+
+To control which compiler the wrapper uses, consult the vendor (like openmpi or mpich). You can check compiler using `mpicc -v`.
+
 ## Making a thin bundle
 
 tar --exclude='*.git*' -zcvf cfd_externals_expo.tar.gz cfd_externals_expo
