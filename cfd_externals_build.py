@@ -37,6 +37,10 @@ repos = {
     "parmetis_fix": "repos/parmetis_fix",
 }
 
+shared_flag = "ON"
+if os.name == "nt":
+    shared_flag = "OFF"
+
 settings = {}
 settings["zlib"] = [
     ("CMAKE_BUILD_TYPE", "RELEASE"),
@@ -51,7 +55,7 @@ settings["hdf5"] = [
 
 settings["cgns"] = [
     ("CMAKE_BUILD_TYPE", "RELEASE"),
-    ("CGNS_BUILD_SHARED", "ON"),
+    ("CGNS_BUILD_SHARED", shared_flag),
     ("CGNS_ENABLE_HDF5", "ON"),
     ("CGNS_ENABLE_LFS", "ON"),
     ("CGNS_ENABLE_PARALLEL", "ON"),
@@ -61,7 +65,7 @@ settings["cgns"] = [
 
 settings["parmetis_fix"] = [
     ("CMAKE_BUILD_TYPE", "RELEASE"),
-    ("BUILD_SHARED_LIBS", "ON"),
+    ("BUILD_SHARED_LIBS", shared_flag),
 ]
 
 
