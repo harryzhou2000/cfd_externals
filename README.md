@@ -8,6 +8,7 @@ Libraries to build:
 - hdf5
 - cgns
 - parmetis+metis
+- cantera (chemistry, requires SCons)
 
 ## Environment for building on Linux:
 
@@ -15,6 +16,7 @@ Libraries to build:
 - MPI SDK (including mpicc, mpicxx wrapper, for example apt package `libopenmpi-dev`)
 - GNU Make
 - CMake
+- SCons (for Cantera)
 - python3 interpreter
 
 ## Environment for building on Windows

@@ -9,7 +9,7 @@ args = parser.parse_args()
 if len(args.libs):
     libs = eval(args.libs)
 else:
-    libs = ["zlib", "hdf5", "cgns", "parmetis_fix"]
+    libs = ["zlib", "hdf5", "cgns", "parmetis_fix", "cantera"]
 
 print(f"starting to build libs: {libs}")
 
@@ -35,6 +35,7 @@ repos = {
     "hdf5": "repos/hdf5",
     "cgns": "repos/cgns",
     "parmetis_fix": "repos/parmetis_fix",
+    "cantera": "repos/cantera",
 }
 
 shared_flag = "ON"
@@ -68,6 +69,22 @@ settings["parmetis_fix"] = [
     ("BUILD_SHARED_LIBS", shared_flag),
 ]
 
+settings["cantera"] = [
+    ("python_package", "n"),
+    ("f90_interface", "n"),
+    ("googletest", "none"),
+    ("doxygen_docs", "n"),
+    ("sphinx_docs", "n"),
+    ("system_eigen", "n"),
+    ("system_fmt", "n"),
+    ("system_yamlcpp", "n"),
+    ("system_sundials", "n"),
+    ("system_highfive", "n"),
+    ("hdf_support", "n"),
+    ("layout", "compact"),
+    ("optimize", "y"),
+]
+
 
 os.makedirs(installDirFull, exist_ok=True)
 
@@ -75,19 +92,29 @@ os.makedirs(installDirFull, exist_ok=True)
 # zlib
 
 for lib in libs:
-    curBuildDirFull = os.path.join(workingDir, buildDirPrefix + "_" + lib)
-    os.makedirs(curBuildDirFull, exist_ok=True)
-    os.chdir(curBuildDirFull)
-    cmakeConfigureCmd = (
-        f"cmake {os.path.join(workingDir, repos[lib])} -DCMAKE_INSTALL_PREFIX={installDirFull} "
-        + f"-DCMAKE_PREFIX_PATH={installDirFull} "
-        + "".join([f" -D{setting[0]}={setting[1]} " for setting in settings[lib]])
-    )
+    curRepoPath = os.path.join(workingDir, repos[lib])
     lw = min((os.get_terminal_size()[0] if sys.stdout.isatty() else 10), 200)
     print("#" * lw)
-    print(f"doing lib {lib} with command: ")
-    print(cmakeConfigureCmd)
+    print(f"doing lib {lib}")
+
+    if lib == "cantera":
+        os.chdir(curRepoPath)
+        os.system("git submodule update --init --depth=1 --recursive")
+        sconsFlags = " ".join([f"{setting[0]}={setting[1]}" for setting in settings[lib]])
+        os.system(f"scons build prefix={installDirFull} {sconsFlags} -j{npBuild}")
+        os.system(f"scons install")
+    else:
+        curBuildDirFull = os.path.join(workingDir, buildDirPrefix + "_" + lib)
+        os.makedirs(curBuildDirFull, exist_ok=True)
+        os.chdir(curBuildDirFull)
+        cmakeConfigureCmd = (
+            f"cmake {curRepoPath} -DCMAKE_INSTALL_PREFIX={installDirFull} "
+            + f"-DCMAKE_PREFIX_PATH={installDirFull} "
+            + "".join([f" -D{setting[0]}={setting[1]} " for setting in settings[lib]])
+        )
+        print(cmakeConfigureCmd)
+        os.system(cmakeConfigureCmd)
+        os.system(f"cmake --build . --config release --parallel {npBuild}")
+        os.system(f"cmake --install .")
+
     print("#" * lw)
-    os.system(cmakeConfigureCmd)
-    os.system(f"cmake --build . --config release --parallel {npBuild}")
-    os.system(f"cmake --install .")

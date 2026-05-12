@@ -11,3 +11,6 @@
 [submodule "repos/parmetis_fix"]
 	path = repos/parmetis_fix
 	url = https://github.com/harryzhou2000/parmetis_fix
+[submodule "repos/cantera"]
+	path = repos/cantera
+	url = https://github.com/Cantera/cantera
