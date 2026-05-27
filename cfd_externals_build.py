@@ -1,6 +1,7 @@
 import os, sys
 import platform
 import argparse
+import shutil
 
 parser = argparse.ArgumentParser("cfd_externals_builder")
 parser.add_argument("-l", "--libs", help="libs to build", default="")
@@ -83,6 +84,7 @@ settings["cantera"] = [
     ("hdf_support", "n"),
     ("layout", "compact"),
     ("optimize", "y"),
+    ("cxx_flags", "-std=c++17 -DEIGEN_DONT_PARALLELIZE"),
 ]
 
 boostIncDir = os.path.abspath(os.path.join(workingDir, "..", "boost"))
@@ -102,11 +104,37 @@ for lib in libs:
     print(f"doing lib {lib}")
 
     if lib == "cantera":
+        missing = []
+        if not shutil.which("scons"):
+            missing.append("scons")
+        try:
+            import packaging
+        except ImportError:
+            missing.append("packaging")
+        try:
+            from ruamel import yaml
+        except ImportError:
+            missing.append("ruamel.yaml")
+        if missing:
+            print(f"ERROR: missing Python packages required to build cantera: {missing}")
+            print(f"  Install them with: pip install {' '.join(missing)}")
+            sys.exit(1)
+
         os.chdir(curRepoPath)
         os.system("git submodule update --init --depth=1 --recursive")
         sconsFlags = " ".join([f"{setting[0]}={setting[1]}" for setting in settings[lib]])
         os.system(f"scons build prefix={installDirFull} {sconsFlags} -j{npBuild}")
         os.system(f"scons install")
+        canteraLib = os.path.join(installDirFull, "lib", "libcantera_shared.so")
+        if os.path.isfile(canteraLib):
+            if not shutil.which("patchelf"):
+                print("WARNING: patchelf not found, cannot strip omp/gomp dependency")
+            else:
+                needed = os.popen(f"readelf -d {canteraLib}").read()
+                for omp in ["libomp.so", "libgomp.so"]:
+                    if omp in needed:
+                        print(f"  stripping {omp} from {canteraLib}")
+                        os.system(f"patchelf --remove-needed {omp} {canteraLib}")
     else:
         curBuildDirFull = os.path.join(workingDir, buildDirPrefix + "_" + lib)
         os.makedirs(curBuildDirFull, exist_ok=True)
