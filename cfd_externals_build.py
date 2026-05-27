@@ -85,6 +85,10 @@ settings["cantera"] = [
     ("optimize", "y"),
 ]
 
+boostIncDir = os.path.abspath(os.path.join(workingDir, "..", "boost"))
+if os.path.isdir(boostIncDir):
+    settings["cantera"].append(("boost_inc_dir", boostIncDir))
+
 
 os.makedirs(installDirFull, exist_ok=True)
 
