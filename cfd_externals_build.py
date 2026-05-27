@@ -2,6 +2,7 @@ import os, sys
 import platform
 import argparse
 import shutil
+import shlex
 
 parser = argparse.ArgumentParser("cfd_externals_builder")
 parser.add_argument("-l", "--libs", help="libs to build", default="")
@@ -17,7 +18,7 @@ print(f"starting to build libs: {libs}")
 workingDir = os.getcwd()
 installDir = "install"
 buildDirPrefix = "build"
-npBuild = 8
+npBuild = int(os.getenv("JOBS", "8"))
 installDirFull = os.path.join(workingDir, installDir)
 
 environDelim = ":"
@@ -122,7 +123,7 @@ for lib in libs:
 
         os.chdir(curRepoPath)
         os.system("git submodule update --init --depth=1 --recursive")
-        sconsFlags = " ".join([f"{setting[0]}={setting[1]}" for setting in settings[lib]])
+        sconsFlags = " ".join([f"{setting[0]}={shlex.quote(str(setting[1]))}" for setting in settings[lib]])
         os.system(f"scons build prefix={installDirFull} {sconsFlags} -j{npBuild}")
         os.system(f"scons install")
         canteraLib = os.path.join(installDirFull, "lib", "libcantera_shared.so")
