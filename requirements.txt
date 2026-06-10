@@ -8,5 +8,6 @@
 # the full Python environment (h5py needs the cfd_externals HDF5).
 scons
 packaging
-ruamel.yaml
+ruamel.yaml>=0.17.21,<1
 patchelf
+jinja2
