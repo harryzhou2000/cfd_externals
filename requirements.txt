@@ -1,0 +1,12 @@
+# Python packages required to build Cantera via cfd_externals_build.py.
+# Install these before running cfd_externals_build.py:
+#
+#   pip install -r external/cfd_externals/requirements.txt
+#
+# These are kept separate from the top-level requirements.txt because
+# cfd_externals (HDF5, zlib, etc.) must be built *before* installing
+# the full Python environment (h5py needs the cfd_externals HDF5).
+scons
+packaging
+ruamel.yaml
+patchelf
