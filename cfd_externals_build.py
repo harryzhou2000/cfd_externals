@@ -69,6 +69,7 @@ settings["cgns"] = [
 settings["parmetis_fix"] = [
     ("CMAKE_BUILD_TYPE", "RELEASE"),
     ("BUILD_SHARED_LIBS", shared_flag),
+    ("CMAKE_POLICY_VERSION_MINIMUM", "3.5"),
 ]
 
 settings["cantera"] = [
@@ -96,7 +97,11 @@ if os.path.isdir(boostIncDir):
 os.makedirs(installDirFull, exist_ok=True)
 
 
-# zlib
+def run_or_die(cmd):
+    ret = os.system(cmd)
+    if ret != 0:
+        print(f"ERROR: command failed (exit code {ret}): {cmd}")
+        sys.exit(1)
 
 for lib in libs:
     curRepoPath = os.path.join(workingDir, repos[lib])
@@ -122,10 +127,10 @@ for lib in libs:
             sys.exit(1)
 
         os.chdir(curRepoPath)
-        os.system("git submodule update --init --depth=1 --recursive")
+        run_or_die("git submodule update --init --depth=1 --recursive")
         sconsFlags = " ".join([f"{setting[0]}={shlex.quote(str(setting[1]))}" for setting in settings[lib]])
-        os.system(f"scons build prefix={installDirFull} {sconsFlags} -j{npBuild}")
-        os.system(f"scons install")
+        run_or_die(f"scons build prefix={installDirFull} {sconsFlags} -j{npBuild}")
+        run_or_die(f"scons install")
         canteraLib = os.path.join(installDirFull, "lib", "libcantera_shared.so")
         if os.path.isfile(canteraLib):
             if not shutil.which("patchelf"):
@@ -146,8 +151,8 @@ for lib in libs:
             + "".join([f" -D{setting[0]}={setting[1]} " for setting in settings[lib]])
         )
         print(cmakeConfigureCmd)
-        os.system(cmakeConfigureCmd)
-        os.system(f"cmake --build . --config release --parallel {npBuild}")
-        os.system(f"cmake --install .")
+        run_or_die(cmakeConfigureCmd)
+        run_or_die(f"cmake --build . --config release --parallel {npBuild}")
+        run_or_die(f"cmake --install .")
 
     print("#" * lw)
