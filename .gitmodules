@@ -14,3 +14,9 @@
 [submodule "repos/cantera"]
 	path = repos/cantera
 	url = https://github.com/Cantera/cantera
+[submodule "repos/caliper"]
+	path = repos/caliper
+	url = https://github.com/LLNL/Caliper.git
+[submodule "repos/amgx"]
+	path = repos/amgx
+	url = https://github.com/harryzhou2000/AMGX.git

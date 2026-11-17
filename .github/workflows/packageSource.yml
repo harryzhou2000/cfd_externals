@@ -21,11 +21,21 @@ jobs:
       - name: Initialize submodules
         run: git submodule update --init --recursive --depth=1
 
+      - name: Validate build policies
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Build mandatory CPU Caliper without CUDA
+        run: |
+          python3 cfd_externals_build.py --libs caliper --jobs 2
+          cmake -S tests/consumer -B build_consumer -DCMAKE_PREFIX_PATH="$PWD/install"
+          cmake --build build_consumer --parallel 2
+          ./build_consumer/caliper_smoke
+
       - name: Prepare source directory
         run: |
           repo_name=$(basename $(pwd))  # Get repository name
           mkdir -p package/$repo_name
-          rsync -av --exclude=package --exclude=.git ./ package/$repo_name/
+          rsync -av --exclude=/package --exclude=.git --exclude='/build*' --exclude='/install*' --exclude=__pycache__ --exclude=/dist ./ package/$repo_name/
 
       - name: Create tarball
         run: |

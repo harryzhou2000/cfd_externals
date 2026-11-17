@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.21)
+project(cfd_external_consumer LANGUAGES CXX)
+find_package(caliper CONFIG REQUIRED)
+add_executable(caliper_smoke main.cpp)
+target_link_libraries(caliper_smoke PRIVATE caliper)

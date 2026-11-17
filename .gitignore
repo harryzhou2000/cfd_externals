@@ -3,3 +3,5 @@ install*
 */build*
 repo_metis
 log.txt
+__pycache__/
+dist/
