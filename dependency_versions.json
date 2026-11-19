@@ -6,10 +6,11 @@
   },
   "amgx": {
     "repository": "https://github.com/harryzhou2000/AMGX.git",
-    "revision": "cf13c94ecafe17ce35a03eaa454622b5fd3f52be",
+    "revision": "b12be5cbec57d5f3bdc7e203366145fe7a951149",
     "upstream_revision": "cc1cebdbb32b14d33762d4ddabcb2e23c1669f47",
     "native_storage_api": 1,
     "allocation_diagnostics_api": 1,
+    "geometric_aggregation_api": 1,
     "native_block_widths": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19],
     "qualification": "See the fork's doc/NativeStorage.md; source capabilities are not a claim of completed downstream numerical qualification."
   }
