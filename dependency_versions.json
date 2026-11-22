@@ -6,7 +6,7 @@
   },
   "amgx": {
     "repository": "https://github.com/harryzhou2000/AMGX.git",
-    "revision": "2e1662452f89077f07bc99b4734bd70b85d58816",
+    "revision": "34380972060bf2be8e0404c2b46274da27d26ce1",
     "upstream_revision": "cc1cebdbb32b14d33762d4ddabcb2e23c1669f47",
     "native_storage_api": 1,
     "allocation_diagnostics_api": 1,
